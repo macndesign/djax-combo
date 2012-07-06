@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% block title %}{{ block.super }} - Filtro{% endblock %}
+{% block script %}
+<script type="text/javascript">
+//AJAX
+$(function(){
+    // Variaveis
+    var $option_vazio = $("<option value='0'>-- Vazio --</option>");
+    var $option_carregado = $("<option value='0'>-- Selecione --</option>");
+    var $id_estado = $("#id_estado");
+    var $id_cidade = $("#id_cidade");
+    var $id_bairro = $("#id_bairro");
+
+    // Carrega cidades
+    $id_estado.on("change", function(){
+        var id_estado = $(this).val();
+        $id_cidade.html($option_vazio);
+        $id_bairro.html($option_vazio);
+        $.get("/address/estado/"+id_estado, function(data){
+            if(data.cidades.length > 0){
+                $id_cidade.removeAttr("disabled");
+                $id_cidade.html($option_carregado);
+            } else {
+                $id_cidade.html($option_vazio);
+            }
+            $.each(data.cidades, function(i, item) {
+                $id_cidade.append(
+                        "<option id='"+data.cidades[i].pk+"' value='"+data.cidades[i].pk+"'>"+
+                                data.cidades[i].nome
+                                +"</option>"
+                );
+            });
+        });
+    });
+
+    // Carrega bairros
+    $id_cidade.on("change", function(){
+        var id_cidade = $(this).val();
+        $.get("/address/cidade/"+id_cidade, function(data){
+            if(data.bairros.length > 0){
+                $id_bairro.removeAttr("disabled");
+                $id_bairro.html($option_carregado);
+            } else {
+                $id_bairro.html($option_vazio);
+            }
+            $.each(data.bairros, function(i, item) {
+                $id_bairro.append(
+                        "<option id='"+data.bairros[i].pk+"' value='"+data.bairros[i].pk+"'>"+
+                                data.bairros[i].nome
+                                +"</option>"
+                );
+            });
+        });
+    });
+
+    if ($id_cidade.val() == "" && $id_bairro.val() ==  ""){
+        $id_cidade.attr("disabled", "disabled");
+        $id_bairro.attr("disabled", "disabled")
+    }
+
+    $id_bairro.keypress(function(event) {
+        if (event.which == 13) {
+            event.preventDefault();
+            if ($id_estado.val() && $id_cidade.val() && $id_bairro.val()){
+                $("#form_local").submit();
+            } else {
+                $id_estado.focus();
+            }
+        }
+    });
+});
+</script>
+{% endblock %}
+{% block content %}
+<form id="form_local" action="{% url address:confirmar-endereco %}" method="post">{% csrf_token %}
+    <div id="id_area">
+        {{ form.as_p }}
+    </div>
+    <button type="submit">Confirmar</button> |
+    <a href="{% url address:remover-endereco %}">Remover</a>
+</form>
+<div class="update">
+{% for field in form.fields %}{{ field }}{% endfor %}
+<!-- Para enchergar a sessao no template tem que setar o
+django.core.context_processors.request no TEMPLATE_CONTEXT_PROCESSORS -->
+{% if request.session.endereco %}
+<h3>Por estabelecimentos</h3>
+<ul>
+    {% for estabelecimento in estabelecimentos %}
+    <li>
+        Nome: <strong>{{ estabelecimento.nome }}</strong><br />
+        Bairro: {{ estabelecimento.bairro.nome }}<br />
+        Cidade: {{ estabelecimento.cidade.nome }}<br />
+        Estado: {{ estabelecimento.estado.sigla }}
+        <hr />
+    </li>
+    {% endfor %}
+</ul>
+{% endif %}
+</div>
+{% endblock %}
