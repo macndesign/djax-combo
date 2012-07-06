@@ -80,7 +80,6 @@ $(function(){
     <a href="{% url address:remover-endereco %}">Remover</a>
 </form>
 <div class="update">
-{% for field in form.fields %}{{ field }}{% endfor %}
 <!-- Para enchergar a sessao no template tem que setar o
 django.core.context_processors.request no TEMPLATE_CONTEXT_PROCESSORS -->
 {% if request.session.endereco %}

@@ -1,29 +1,4 @@
 from django.db import models
-from address.forms import EnderecoForm
-
-class Endereco(object):
-    def __init__(self, estado=None, cidade=None, bairro=None):
-        self.estado = estado
-        self.cidade = cidade
-        self.bairro = bairro
-
-    def get_form(self):
-        form = EnderecoForm()
-
-        form.fields['estado'].initial = self.estado.pk
-
-        cidades = self.estado.cidade_set.all()
-        form.fields['cidade'].queryset = cidades
-
-        form.fields['cidade'].initial = self.cidade
-
-        bairros = self.cidade.bairro_set.all()
-        form.fields['bairro'].queryset = bairros
-
-        form.fields['bairro'].initial = self.bairro
-
-        return form
-
 
 class Estado(models.Model):
     sigla = models.CharField(max_length=2)
@@ -74,7 +49,7 @@ class Cidade(models.Model):
         return blist
 
     def __unicode__(self):
-        return self.nome
+        return '%s - %s' % (self.nome, self.estado)
     
     def as_dict(self):
         return {
@@ -90,7 +65,7 @@ class Bairro(models.Model):
     cidade = models.ForeignKey('Cidade')
 
     def __unicode__(self):
-        return self.nome
+        return '%s - %s' % (self.nome, self.cidade)
     
     def as_dict(self):
         return {

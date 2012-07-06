@@ -1,6 +1,6 @@
 # coding=utf-8
-from address.models import Estado, Cidade, Bairro
 from django import forms
+from address.models import Estado, Cidade, Bairro
 
 class EnderecoForm(forms.Form):
     estado = forms.ModelChoiceField(

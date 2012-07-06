@@ -1,4 +1,4 @@
-# Django settings for djax_combo project.
+# Django settings for djax-combo project.
 
 import os
 ROOT_DIR = os.path.dirname(__file__)
@@ -113,7 +113,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
 )
 
-ROOT_URLCONF = 'djax_combo.urls'
+ROOT_URLCONF = 'djax-combo.urls'
 
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
@@ -134,6 +134,7 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
     'address',
+    'delivery',
 )
 
 # A sample logging configuration. The only tangible logging

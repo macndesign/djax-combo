@@ -32,4 +32,4 @@ class LocalEntrega(models.Model):
             'pk': self.pk,
             'pk_estabelecimento': self.estabelecimento.pk,
             'pk_bairro': self.bairro.pk,
-            }
+        }
