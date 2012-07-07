@@ -9,43 +9,90 @@ $(function(){
     var $id_cidade = $("#id_cidade");
     var $id_bairro = $("#id_bairro");
 
-    $.get("{% url address:estados %}", function(data){
-        var $list_estado = [];
+    function carrega_cidades(){
+        var $val_estado = $id_estado.val();
 
-        for (i=0; i < data.length; i++) {
-            $list_estado.push({id: data[i].pk, text: data[i].sigla});
+        if ($val_estado > 0){
+            $.get("/address/estado/" + $val_estado, function(data){
+
+                // Abilitando o select
+                $id_cidade.select2("enable");
+
+                $id_cidade.find("option").remove();
+
+                // Preenchendo
+                $.each(data.cidades, function(i, item) {
+                    $id_cidade.append(
+                            "<option id='"+data.cidades[i].pk+"' value='"+data.cidades[i].pk+"'>"+
+                                    data.cidades[i].nome
+                                    +"</option>"
+                    );
+                });
+
+                // Carrega cidades e indica visualmente
+                $id_cidade.prepend("<option value='0' selected='selected'>-- Selecione --</option>");
+                $id_cidade.select2("val", 0);
+
+                // Limpa bairros e indica visualmente
+                $id_bairro.html("<option value='0' selected='selected'>-- Vazio --</option>");
+                $id_bairro.select2("val", 0);
+            });
         }
+    }
 
-        $id_estado.select2({
-            placeholder: "Selecione...",
-            allowClear: true,
-            data: $list_estado
-        });
+    function carrega_bairros(){
+        var $val_cidade = $id_cidade.val();
 
-    });
+        if ($val_cidade > 0){
+            $.get("/address/cidade/" + $val_cidade, function(data){
 
-    $id_cidade.select2({
-        placeholder: "Select report type",
-        allowClear: true,
-        data: [{id: 0, text: 'story'},{id: 1, text: 'bug'},{id: 2, text: 'task'}]
-    });
+                // Abilitando o select
+                $id_bairro.select2("enable");
 
-    $id_bairro.select2({
-        placeholder: "Select report type",
-        allowClear: true,
-        data: [{id: 0, text: 'story'},{id: 1, text: 'bug'},{id: 2, text: 'task'}]
-    });
+                $id_bairro.find("option").remove();
+
+                // Preenchendo
+                $.each(data.bairros, function(i, item) {
+                    $id_bairro.append(
+                            "<option id='"+data.bairros[i].pk+"' value='"+data.bairros[i].pk+"'>"+
+                                    data.bairros[i].nome
+                                    +"</option>"
+                    );
+                });
+                $id_bairro.prepend("<option value='0' selected='selected'>-- Selecione --</option>");
+                $id_bairro.select2("val", 0);
+            });
+        }
+    }
+
+    $id_estado.select2();
+    $id_cidade.select2();
+    $id_bairro.select2();
+
+    // Change
+    $id_estado.bind("change", carrega_cidades);
+    $id_cidade.bind("change", carrega_bairros);
+
+    {% if not request.session.endereco %}
+        $id_estado.select2("val", 0);
+
+        $id_cidade.select2("val", 0);
+        $id_cidade.select2("disable");
+
+        $id_bairro.select2("val", 0);
+        $id_bairro.select2("disable");
+    {% endif %}
 
 });
 </script>
 {% endblock %}
 {% block content %}
-<form id="form_local" action="{% url address:confirmar-endereco %}" method="post">{% csrf_token %}
-    <p><input type="hidden" id="id_estado" style="width: 300px"></p>
-    <p><input type="hidden" id="id_cidade" style="width: 300px"></p>
-    <p><input type="hidden" id="id_bairro" style="width: 300px"></p>
+<form id="form_local" action="{% url address:confirmar-endereco-select2 %}" method="post">{% csrf_token %}
+    {% for field in form %}
+        <p>{{ field }}</p>
+    {% endfor %}
     <p><button type="submit">Confirmar</button> |
-    <a href="{% url address:remover-endereco %}">Remover</a></p>
+    <a href="{% url address:remover-endereco-select2 %}">Remover</a></p>
 </form>
 <div class="update">
 {% if request.session.endereco %}

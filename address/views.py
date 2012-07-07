@@ -27,7 +27,7 @@ class Endereco(object):
         return form
 
 
-def confirmar_endereco(request):
+def confirmar_endereco(request, redirect_to='delivery:home'):
     endereco = Endereco()
 
     if ('estado' and 'cidade' and 'bairro') in request.POST:
@@ -39,13 +39,21 @@ def confirmar_endereco(request):
             request.session['endereco'] = endereco
 
         except ValueError:
-            return redirect(reverse('delivery:home'))
+            return redirect(reverse(redirect_to))
 
-    return redirect(reverse('delivery:home'))
+    return redirect(reverse(redirect_to))
 
 
-def remover_endereco(request):
+def confirmar_endereco_select2(request):
+    return confirmar_endereco(request, redirect_to='delivery:home-select2')
+
+
+def remover_endereco(request, redirect_to='delivery:home'):
     if 'endereco' in request.session:
         del  request.session['endereco']
 
-    return redirect(reverse('delivery:home'))
+    return redirect(reverse(redirect_to))
+
+
+def remover_endereco_select2(request):
+    return remover_endereco(request, redirect_to='delivery:home-select2')
