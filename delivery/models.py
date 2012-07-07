@@ -8,7 +8,7 @@ class Estabelecimento(models.Model):
     bairro = models.ForeignKey(Bairro)
 
     def __unicode__(self):
-        return self.nome
+        return '%s - %s' % (self.nome, self.bairro)
 
     def as_dict(self):
         return {
@@ -17,7 +17,7 @@ class Estabelecimento(models.Model):
             'pk_estado': self.estado.pk,
             'pk_cidade': self.cidade.pk,
             'pk_bairro': self.bairro.pk,
-            }
+        }
 
 
 class LocalEntrega(models.Model):

@@ -2,6 +2,8 @@
 from django.http import HttpResponse
 from django.utils import simplejson
 from django.views.generic.detail import BaseDetailView
+from django.views.generic.list import BaseListView
+from django.db.models.query import QuerySet
 
 class JSONResponseMixin(object):
     def render_to_response(self, context):
@@ -16,6 +18,11 @@ class JSONResponseMixin(object):
 
 class JSONDetailView(JSONResponseMixin, BaseDetailView):
     def render_to_response(self, context):
-        if self.request.is_ajax():
-            obj = context['object'].as_dict()
-            return JSONResponseMixin.render_to_response(self, obj)
+        obj = context['object'].as_dict()
+        return JSONResponseMixin.render_to_response(self, obj)
+
+
+class JSONListView(JSONResponseMixin, BaseListView):
+    def render_to_response(self, context):
+        obj_list = list(self.model.objects.values())
+        return JSONResponseMixin.render_to_response(self, obj_list)

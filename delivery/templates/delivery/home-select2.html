@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}{{ block.super }} - Filtro{% endblock %}
+{% block script %}
+<script type="text/javascript">
+$(function(){
+
+    // Variaveis
+    var $id_estado = $("#id_estado");
+    var $id_cidade = $("#id_cidade");
+    var $id_bairro = $("#id_bairro");
+
+    $.get("{% url address:estados %}", function(data){
+        var $list_estado = [];
+
+        for (i=0; i < data.length; i++) {
+            $list_estado.push({id: data[i].pk, text: data[i].sigla});
+        }
+
+        $id_estado.select2({
+            placeholder: "Selecione...",
+            allowClear: true,
+            data: $list_estado
+        });
+
+    });
+
+    $id_cidade.select2({
+        placeholder: "Select report type",
+        allowClear: true,
+        data: [{id: 0, text: 'story'},{id: 1, text: 'bug'},{id: 2, text: 'task'}]
+    });
+
+    $id_bairro.select2({
+        placeholder: "Select report type",
+        allowClear: true,
+        data: [{id: 0, text: 'story'},{id: 1, text: 'bug'},{id: 2, text: 'task'}]
+    });
+
+});
+</script>
+{% endblock %}
+{% block content %}
+<form id="form_local" action="{% url address:confirmar-endereco %}" method="post">{% csrf_token %}
+    <p><input type="hidden" id="id_estado" style="width: 300px"></p>
+    <p><input type="hidden" id="id_cidade" style="width: 300px"></p>
+    <p><input type="hidden" id="id_bairro" style="width: 300px"></p>
+    <p><button type="submit">Confirmar</button> |
+    <a href="{% url address:remover-endereco %}">Remover</a></p>
+</form>
+<div class="update">
+{% if request.session.endereco %}
+<h3>Por estabelecimentos</h3>
+<ul>
+    {% for estabelecimento in estabelecimentos %}
+    <li>
+        Nome: <strong>{{ estabelecimento.nome }}</strong><br />
+        Bairro: {{ estabelecimento.bairro.nome }}<br />
+        Cidade: {{ estabelecimento.cidade.nome }}<br />
+        Estado: {{ estabelecimento.estado.sigla }}
+        <hr />
+    </li>
+    {% endfor %}
+</ul>
+{% endif %}
+</div>
+{% endblock %}

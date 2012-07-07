@@ -5,6 +5,7 @@ from delivery.models import Estabelecimento, LocalEntrega
 
 urlpatterns = patterns('delivery.views',
     url(r'^$', 'home', name='home'),
+    url(r'^select2/$', 'home_select2', name='home-select2'),
 
     # JSON
     url(r'^estabelecimento/(?P<pk>\d)$', JSONDetailView.as_view(model=Estabelecimento)),
