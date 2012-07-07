@@ -1,5 +1,10 @@
 {% extends "base.html" %}
 {% block title %}{{ block.super }} - Filtro{% endblock %}
+{% block extra_head %}
+    <style type="text/css">
+        select { width: 300px }
+    </style>
+{% endblock %}
 {% block script %}
 <script type="text/javascript">
 $(function(){
