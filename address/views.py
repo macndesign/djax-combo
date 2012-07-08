@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404, redirect
 from address.forms import EnderecoForm
@@ -17,12 +18,12 @@ class Endereco(object):
         cidades = self.estado.cidade_set.all()
         form.fields['cidade'].queryset = cidades
 
-        form.fields['cidade'].initial = self.cidade
+        form.fields['cidade'].initial = self.cidade.pk
 
         bairros = self.cidade.bairro_set.all()
         form.fields['bairro'].queryset = bairros
 
-        form.fields['bairro'].initial = self.bairro
+        form.fields['bairro'].initial = self.bairro.pk
 
         return form
 
@@ -30,7 +31,9 @@ class Endereco(object):
 def confirmar_endereco(request, redirect_to='delivery:home'):
     endereco = Endereco()
 
-    if ('estado' and 'cidade' and 'bairro') in request.POST:
+    if ('estado' in request.POST) and ('cidade' in request.POST) and ('bairro' in request.POST) and (
+        int(request.POST['estado']) > 0) and (int(request.POST['cidade']) > 0) and (int(request.POST['bairro']) > 0):
+
         try:
             endereco.estado = get_object_or_404(Estado, pk=request.POST['estado'])
             endereco.cidade = get_object_or_404(Cidade, pk=request.POST['cidade'])
@@ -40,6 +43,9 @@ def confirmar_endereco(request, redirect_to='delivery:home'):
 
         except ValueError:
             return redirect(reverse(redirect_to))
+
+    else:
+        messages.add_message(request, messages.ERROR, message=u'Preencha todos os campos')
 
     return redirect(reverse(redirect_to))
 

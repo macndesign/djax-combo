@@ -2,16 +2,46 @@
 <head>
 <title>{% block title %}Address{% endblock %}</title>
 <style type="text/css">
-    body { font-family: "Arial", "Verdana", sans-serif; font-size: 80% }
+    body, button {
+        font-family: "Arial", "Verdana", sans-serif;
+        font-size: 12px;
+    }
+    .block {
+        padding: 5px 10px;
+        border: none;
+        border-radius: 3px;
+        -webkit-border-radius: 3px;
+        -moz-border-radius: 3px;
+    }
     ul.nav { padding: 0 }
     ul.nav li { display: inline }
-    ul.nav a {
-        background: navy;
-        padding: 3px 8px;
+    .btn {
+        background: #3875D7;
         text-decoration: none;
-        font-weight: bold;
         color: #fff;
+        cursor: default;
     }
+    .btn:disabled {
+        background: #f4f4f4;
+        text-decoration: none;
+        color: #ccc;
+        cursor: default;
+    }
+    .btn:disabled:hover { background: #f4f4f4 }
+    .messages {
+        padding: 0 0 8px 0;
+        background: #f5f5dc;
+        text-decoration: none;
+        color: #8b4513;
+        margin-bottom: 8px;
+    }
+    .messages li {
+        list-style: none;
+        padding: 8px 8px 0 8px;
+        font-size: 1.2em;
+    }
+    .btn:hover, .btn:focus { background: #6495ed }
+    .btn:active { background: #00008b }
 </style>
 <link href="{{ STATIC_URL }}select2/select2.css" rel="stylesheet"/>
 <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.min.js"></script>
@@ -20,9 +50,16 @@
 </head>
 <body>
 <ul class="nav">
-    <li><a href="{% url delivery:home %}">Common select</a></li>
-    <li><a href="{% url delivery:home-select2 %}">Using select2 plugin</a></li>
+    <li><a class="block btn" href="{% url delivery:home %}">Common select</a></li>
+    <li><a class="block btn" href="{% url delivery:home-select2 %}">Using select2 plugin</a></li>
 </ul>
+{% if messages %}
+    <ul class="block messages">
+        {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
 {% block content %}{% endblock %}
 {% block script %}{% endblock %}
 </body>

@@ -3,9 +3,11 @@ from django.db import models
 class Estado(models.Model):
     sigla = models.CharField(max_length=2)
     
+
     class Meta:
         ordering = ['sigla']
     
+
     @property
     def cidades(self):
         cidades = self.cidade_set.all()
@@ -18,9 +20,11 @@ class Estado(models.Model):
             
         return clist
 
+
     def __unicode__(self):
         return self.sigla
     
+
     def as_dict(self):
         return {
             'pk': self.pk,
@@ -33,9 +37,11 @@ class Cidade(models.Model):
     nome = models.CharField(max_length=75)
     estado = models.ForeignKey('Estado')
     
+
     class Meta:
         ordering = ['nome']
     
+
     @property
     def bairros(self):
         bairros = self.bairro_set.all()
@@ -48,9 +54,11 @@ class Cidade(models.Model):
             
         return blist
 
+
     def __unicode__(self):
-        return '%s - %s' % (self.nome, self.estado)
+        return self.nome
     
+
     def as_dict(self):
         return {
             'pk': self.pk,
@@ -64,9 +72,11 @@ class Bairro(models.Model):
     nome = models.CharField(max_length=120)
     cidade = models.ForeignKey('Cidade')
 
+
     def __unicode__(self):
-        return '%s - %s' % (self.nome, self.cidade)
+        return self.nome
     
+
     def as_dict(self):
         return {
             'pk': self.pk,

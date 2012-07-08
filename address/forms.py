@@ -4,16 +4,16 @@ from address.models import Estado, Cidade, Bairro
 
 class EnderecoForm(forms.Form):
     estado = forms.ModelChoiceField(
-        empty_label="-- Selecione --",
+        empty_label="Selecione ...",
         queryset = Estado.objects.all(),
     )
 
     cidade = forms.ModelChoiceField(
-        empty_label="-- Vazio --",
+        empty_label="",
         queryset = Cidade.objects.all()[:1],
     )
 
     bairro = forms.ModelChoiceField(
-        empty_label="-- Vazio --",
+        empty_label="",
         queryset = Bairro.objects.all()[:1],
     )

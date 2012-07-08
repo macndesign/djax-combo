@@ -2,7 +2,7 @@
 {% block title %}{{ block.super }} - Filtro{% endblock %}
 {% block extra_head %}
     <style type="text/css">
-        select { width: 300px }
+        select { width: 260px }
     </style>
 {% endblock %}
 {% block script %}
@@ -10,9 +10,12 @@
 $(function(){
 
     // Variaveis
+    var $option_vazio = $("<option value='0'></option>");
+    var $option_carregado = $("<option value='0'>Selecione ...</option>");
     var $id_estado = $("#id_estado");
     var $id_cidade = $("#id_cidade");
     var $id_bairro = $("#id_bairro");
+    var $id_confirm = $("#confirm");
 
     function carrega_cidades(){
         var $val_estado = $id_estado.val();
@@ -34,13 +37,31 @@ $(function(){
                     );
                 });
 
-                // Carrega cidades e indica visualmente
-                $id_cidade.prepend("<option value='0' selected='selected'>-- Selecione --</option>");
-                $id_cidade.select2("val", 0);
+                if (data.cidades.length){
+                    // Conf. cidade
+                    $id_cidade.prepend($option_carregado);
+                    $id_cidade.select2("val", 0);
 
-                // Limpa bairros e indica visualmente
-                $id_bairro.html("<option value='0' selected='selected'>-- Vazio --</option>");
-                $id_bairro.select2("val", 0);
+                    // Conf. bairro
+                    $id_bairro.html($option_vazio);
+                    $id_bairro.select2("val", 0);
+                    $id_bairro.select2("disable");
+
+                } else {
+                    // Conf. cidade
+                    $id_cidade.html($option_vazio);
+                    $id_cidade.select2("val", 0);
+                    $id_cidade.select2("disable");
+
+                    // Conf. bairro
+                    $id_bairro.html($option_vazio);
+                    $id_bairro.select2("val", 0);
+                    $id_bairro.select2("disable");
+
+                    // Conf. btns
+                    $id_confirm.attr("disabled", true);
+                }
+
             });
         }
     }
@@ -64,10 +85,26 @@ $(function(){
                                     +"</option>"
                     );
                 });
-                $id_bairro.prepend("<option value='0' selected='selected'>-- Selecione --</option>");
-                $id_bairro.select2("val", 0);
+
+                if (data.bairros.length){
+                    $id_bairro.prepend($option_carregado);
+                    $id_bairro.select2("val", 0);
+
+                } else {
+                    $id_bairro.html($option_vazio);
+                    $id_bairro.select2("disable");
+                    $id_bairro.select2("val", 0);
+
+                    // Conf. btns
+                    $id_confirm.attr("disabled", true);
+                }
+
             });
         }
+    }
+
+    function enabled_buttons() {
+        $id_confirm.attr("disabled", false);
     }
 
     $id_estado.select2();
@@ -77,6 +114,7 @@ $(function(){
     // Change
     $id_estado.bind("change", carrega_cidades);
     $id_cidade.bind("change", carrega_bairros);
+    $id_bairro.bind("change", enabled_buttons);
 
     {% if not request.session.endereco %}
         $id_estado.select2("val", 0);
@@ -86,6 +124,8 @@ $(function(){
 
         $id_bairro.select2("val", 0);
         $id_bairro.select2("disable");
+
+        $id_confirm.attr("disabled", true);
     {% endif %}
 
 });
@@ -96,8 +136,8 @@ $(function(){
     {% for field in form %}
         <p>{{ field }}</p>
     {% endfor %}
-    <p><button type="submit">Confirmar</button> |
-    <a href="{% url address:remover-endereco-select2 %}">Remover</a></p>
+    <p><button class="block btn" id="confirm" type="submit">Confirmar</button>
+    <a class="block btn" href="{% url address:remover-endereco-select2 %}">Remover</a></p>
 </form>
 <div class="update">
 {% if request.session.endereco %}
