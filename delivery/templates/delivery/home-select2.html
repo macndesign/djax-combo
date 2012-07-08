@@ -104,7 +104,12 @@ $(function(){
     }
 
     function enabled_buttons() {
-        $id_confirm.attr("disabled", false);
+        var $val_bairro = $id_bairro.val();
+        if ($val_bairro == 0) {
+            $id_confirm.attr("disabled", true);
+        } else if ($val_bairro > 0) {
+            $id_confirm.attr("disabled", false);
+        }
     }
 
     $id_estado.select2();
