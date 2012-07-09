@@ -5,7 +5,6 @@ from delivery.models import Estabelecimento, LocalEntrega
 
 urlpatterns = patterns('delivery.views',
     url(r'^$', 'home', name='home'),
-    url(r'^select2/$', 'home_select2', name='home-select2'),
 )
 
 urlpatterns += patterns('',

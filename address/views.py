@@ -50,16 +50,8 @@ def confirmar_endereco(request, redirect_to='delivery:home'):
     return redirect(reverse(redirect_to))
 
 
-def confirmar_endereco_select2(request):
-    return confirmar_endereco(request, redirect_to='delivery:home-select2')
-
-
 def remover_endereco(request, redirect_to='delivery:home'):
     if 'endereco' in request.session:
         del  request.session['endereco']
 
     return redirect(reverse(redirect_to))
-
-
-def remover_endereco_select2(request):
-    return remover_endereco(request, redirect_to='delivery:home-select2')

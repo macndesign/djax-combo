@@ -49,17 +49,6 @@
 {% block extra_head %}{% endblock %}
 </head>
 <body>
-<ul class="nav">
-    <li><a class="block btn" href="{% url delivery:home %}">Common select</a></li>
-    <li><a class="block btn" href="{% url delivery:home-select2 %}">Using select2 plugin</a></li>
-</ul>
-{% if messages %}
-    <ul class="block messages">
-        {% for message in messages %}
-            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-        {% endfor %}
-    </ul>
-{% endif %}
 {% block content %}{% endblock %}
 {% block script %}{% endblock %}
 </body>

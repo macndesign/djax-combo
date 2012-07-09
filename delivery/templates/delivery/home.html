@@ -1,87 +1,182 @@
 {% extends "base.html" %}
 {% block title %}{{ block.super }} - Filtro{% endblock %}
+{% block extra_head %}
+    <style type="text/css">
+        select { width: 260px }
+    </style>
+{% endblock %}
 {% block script %}
 <script type="text/javascript">
-//AJAX
 $(function(){
+
     // Variaveis
-    var $option_vazio = $("<option value='0'>-- Vazio --</option>");
-    var $option_carregado = $("<option value='0'>-- Selecione --</option>");
+    var $option_vazio = $("<option value='0'></option>");
+    var $option_carregado = $("<option value='0'>Selecione ...</option>");
     var $id_estado = $("#id_estado");
     var $id_cidade = $("#id_cidade");
     var $id_bairro = $("#id_bairro");
+    var $id_confirm = $("#confirm");
 
-    // Carrega cidades
-    $id_estado.on("change", function(){
-        var id_estado = $(this).val();
-        $id_cidade.html($option_vazio);
-        $id_bairro.html($option_vazio);
-        $.get("/address/estado/"+id_estado, function(data){
-            if(data.cidades.length > 0){
-                $id_cidade.removeAttr("disabled");
-                $id_cidade.html($option_carregado);
-            } else {
-                $id_cidade.html($option_vazio);
-            }
-            $.each(data.cidades, function(i, item) {
-                $id_cidade.append(
-                        "<option id='"+data.cidades[i].pk+"' value='"+data.cidades[i].pk+"'>"+
-                                data.cidades[i].nome
-                                +"</option>"
-                );
+    function carrega_cidades(){
+        var $val_estado = $id_estado.val();
+
+        if ($val_estado > 0){
+            $.get("/address/estado/" + $val_estado, function(data){
+
+                // Abilitando o select
+                $id_cidade.select2("enable");
+
+                $id_cidade.find("option").remove();
+
+                // Preenchendo
+                $.each(data.cidades, function(i, item) {
+                    $id_cidade.append(
+                            "<option id='"+data.cidades[i].pk+"' value='"+data.cidades[i].pk+"'>"+
+                                    data.cidades[i].nome
+                                    +"</option>"
+                    );
+                });
+
+                if (data.cidades.length){
+                    // Conf. cidade
+                    $id_cidade.prepend($option_carregado);
+                    $id_cidade.select2("val", 0);
+
+                    // Conf. bairro
+                    $id_bairro.html($option_vazio);
+                    $id_bairro.select2("val", 0);
+                    $id_bairro.select2("disable");
+
+                    // Conf. btns
+                    $id_confirm.attr("disabled", true);
+
+                } else {
+                    // Conf. cidade
+                    $id_cidade.html($option_vazio);
+                    $id_cidade.select2("val", 0);
+                    $id_cidade.select2("disable");
+
+                    // Conf. bairro
+                    $id_bairro.html($option_vazio);
+                    $id_bairro.select2("val", 0);
+                    $id_bairro.select2("disable");
+
+                    // Conf. btns
+                    $id_confirm.attr("disabled", true);
+                }
+
             });
-        });
-    });
 
-    // Carrega bairros
-    $id_cidade.on("change", function(){
-        var id_cidade = $(this).val();
-        $.get("/address/cidade/"+id_cidade, function(data){
-            if(data.bairros.length > 0){
-                $id_bairro.removeAttr("disabled");
-                $id_bairro.html($option_carregado);
-            } else {
-                $id_bairro.html($option_vazio);
-            }
-            $.each(data.bairros, function(i, item) {
-                $id_bairro.append(
-                        "<option id='"+data.bairros[i].pk+"' value='"+data.bairros[i].pk+"'>"+
-                                data.bairros[i].nome
-                                +"</option>"
-                );
-            });
-        });
-    });
+        } else {
+            // Conf. estado
+            $id_estado.select2("val", 0);
 
-    if ($id_cidade.val() == "" && $id_bairro.val() ==  ""){
-        $id_cidade.attr("disabled", "disabled");
-        $id_bairro.attr("disabled", "disabled")
+            // Conf. cidade
+            $id_cidade.html($option_vazio);
+            $id_cidade.select2("val", 0);
+            $id_cidade.select2("disable");
+
+            // Conf. bairro
+            $id_bairro.html($option_vazio);
+            $id_bairro.select2("val", 0);
+            $id_bairro.select2("disable");
+
+            // Conf. btns
+            $id_confirm.attr("disabled", true);
+        }
     }
 
-    $id_bairro.keypress(function(event) {
-        if (event.which == 13) {
-            event.preventDefault();
-            if ($id_estado.val() && $id_cidade.val() && $id_bairro.val()){
-                $("#form_local").submit();
-            } else {
-                $id_estado.focus();
-            }
+    function carrega_bairros(){
+        var $val_cidade = $id_cidade.val();
+
+        if ($val_cidade > 0){
+            $.get("/address/cidade/" + $val_cidade, function(data){
+
+                // Abilitando o select
+                $id_bairro.select2("enable");
+
+                $id_bairro.find("option").remove();
+
+                // Preenchendo
+                $.each(data.bairros, function(i, item) {
+                    $id_bairro.append(
+                            "<option id='"+data.bairros[i].pk+"' value='"+data.bairros[i].pk+"'>"+
+                                    data.bairros[i].nome
+                                    +"</option>"
+                    );
+                });
+
+                if (data.bairros.length){
+                    $id_bairro.prepend($option_carregado);
+                    $id_bairro.select2("val", 0);
+
+                } else {
+                    $id_bairro.html($option_vazio);
+                    $id_bairro.select2("disable");
+                    $id_bairro.select2("val", 0);
+
+                    // Conf. btns
+                    $id_confirm.attr("disabled", true);
+                }
+
+            });
         }
-    });
+    }
+
+    function enabled_buttons() {
+        var $val_bairro = $id_bairro.val();
+
+        if ($val_bairro == 0) {
+            $id_confirm.attr("disabled", true);
+
+        } else if ($val_bairro > 0) {
+            $id_confirm.attr("disabled", false);
+        }
+    }
+
+    $id_estado.select2();
+    $id_cidade.select2();
+    $id_bairro.select2();
+
+    // Change
+    $id_estado.bind("change", carrega_cidades);
+    $id_cidade.bind("change", carrega_bairros);
+    $id_bairro.bind("change", enabled_buttons);
+
+    {% if not request.session.endereco %}
+        $id_estado.select2("val", 0);
+
+        $id_cidade.select2("val", 0);
+        $id_cidade.select2("disable");
+
+        $id_bairro.select2("val", 0);
+        $id_bairro.select2("disable");
+
+        $id_confirm.attr("disabled", true);
+    {% endif %}
+
 });
 </script>
 {% endblock %}
 {% block content %}
+{% if messages %}
+    <ul class="block messages">
+        {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
 <form id="form_local" action="{% url address:confirmar-endereco %}" method="post">{% csrf_token %}
-    <div id="id_area">
-        {{ form.as_p }}
-    </div>
-    <button class="block btn" type="submit">Confirmar</button>
-    <a class="block btn" href="{% url address:remover-endereco %}">Remover</a>
+    {% for field in form %}
+        <p>{{ field }}</p>
+    {% endfor %}
+    <p>
+        <button class="block btn" id="confirm" type="submit">Confirmar</button>
+        <a class="block btn" href="{% url address:remover-endereco %}">Limpar</a>
+        <a class="block btn" href="{% url delivery:home %}">Voltar</a>
+    </p>
 </form>
 <div class="update">
-<!-- Para enchergar a sessao no template tem que setar o
-django.core.context_processors.request no TEMPLATE_CONTEXT_PROCESSORS -->
 {% if request.session.endereco %}
 <h3>Por estabelecimentos</h3>
 <ul>
@@ -91,8 +186,9 @@ django.core.context_processors.request no TEMPLATE_CONTEXT_PROCESSORS -->
         Bairro: {{ estabelecimento.bairro.nome }}<br />
         Cidade: {{ estabelecimento.cidade.nome }}<br />
         Estado: {{ estabelecimento.estado.sigla }}
-        <hr />
     </li>
+    {% empty %}
+        <li>Não há estabelecimentos</li>
     {% endfor %}
 </ul>
 {% endif %}
