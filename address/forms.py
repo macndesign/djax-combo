@@ -7,13 +7,5 @@ class EnderecoForm(forms.Form):
         empty_label="Selecione ...",
         queryset = Estado.objects.all(),
     )
-
-    cidade = forms.ModelChoiceField(
-        empty_label="",
-        queryset = Cidade.objects.all()[:1],
-    )
-
-    bairro = forms.ModelChoiceField(
-        empty_label="",
-        queryset = Bairro.objects.all()[:1],
-    )
+    cidade = forms.ChoiceField(choices=(("0", ""),))
+    bairro = forms.ChoiceField(choices=(("0", ""),))
