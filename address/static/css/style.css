@@ -1,0 +1,30 @@
+@font-face {
+    font-family: 'Open Sans';
+    src: url('/static/css/OpenSans-Regular.ttf');
+    src: local('Open Sans'), url('Open_Sans/OpenSans-Regular.ttf') format('truetype');
+}
+@font-face {
+    font-family: 'Open Sans Bold';
+    src: url('/static/css/Open_Sans/OpenSans-Bold.ttf');
+    src: local('Open Sans Bold'), url('Open_Sans/OpenSans-Bold.ttf') format('truetype');
+}
+@font-face {
+    font-family: 'Open Sans Light';
+    src: url('/static/css/Open_Sans/OpenSans-Light.ttf');
+    src: local('Open Sans Light'), url('Open_Sans/OpenSans-Light.ttf') format('truetype');
+}
+body {
+    font-family: 'Open Sans', 'Lucida Grande', 'Lucida Sans', Verdana, sans-serif;
+    color: #555;
+    font-size: 0.9em;
+}
+h1 {
+    font-family: 'Open Sans Light', 'Lucida Grande', 'Lucida Sans', Verdana, sans-serif;
+}
+strong, b {
+    font-family: 'Open Sans Bold', 'Lucida Grande', 'Lucida Sans', Verdana, sans-serif;
+}
+button.small.button {
+    font-weight: normal;
+    padding: 10px 13px 11px;
+}
