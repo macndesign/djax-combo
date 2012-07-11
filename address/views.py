@@ -15,13 +15,13 @@ class Endereco(object):
 
         form.fields['estado'].initial = self.estado.pk
 
-        cidades = self.estado.cidade_set.all()
-        form.fields['cidade'].queryset = cidades
+        cidades = [(o.id, str(o)) for o in self.estado.cidade_set.all()]
+        form.fields['cidade'].choices = cidades
 
         form.fields['cidade'].initial = self.cidade.pk
 
-        bairros = self.cidade.bairro_set.all()
-        form.fields['bairro'].queryset = bairros
+        bairros = [(o.id, str(o)) for o in self.cidade.bairro_set.all()]
+        form.fields['bairro'].choices = bairros
 
         form.fields['bairro'].initial = self.bairro.pk
 
