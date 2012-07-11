@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}{{ block.super }} - Filtro{% endblock %}
+
+{% block form_address %}
+    {% include "address/js_combo_address.html" %}
+    {% include "address/main_combo_address.html" %}
+{% endblock %}
+
+{% block content %}
+
+    {% include "snippets/messages.html" %}
+    {% if request.session.endereco %}
+        {% for estabelecimento in estabelecimentos %}
+            <section>
+                <h2><a href="#">{{ estabelecimento.nome }}</a></h2>
+                <p>{{ estabelecimento.bairro.nome }}<br />{{ estabelecimento.cidade.nome }} - {{ estabelecimento.estado.sigla }}</p>
+            </section>
+        {% empty %}
+            <section>
+                <h2>Não há estabelecimentos</h2>
+            </section>
+        {% endfor %}
+    {% endif %}
+
+{% endblock %}
