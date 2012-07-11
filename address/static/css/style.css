@@ -62,6 +62,7 @@ ul.nav li { display: inline }
 .btn:disabled:hover { background: #f4f4f4 }
 .btn:hover, .btn:focus { background: #6495ed }
 .btn:active { background: #00008b }
+a.btn { color: #fff }
 
 /* Alert messages */
 
@@ -80,4 +81,4 @@ ul.nav li { display: inline }
 
 /* Custom */
 
-#form_local select { width: 260px }
+#form_local select { width: 100% }

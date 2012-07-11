@@ -168,27 +168,26 @@ $(function(){
 {% endblock %}
 
 {% block content %}
-{% if messages %}
-    <ul class="block messages">
-        {% for message in messages %}
-            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-        {% endfor %}
-    </ul>
-{% endif %}
 
-<div class="update">
-{% if request.session.endereco %}
-    {% for estabelecimento in estabelecimentos %}
-        <p>
-            <strong><a href="#">{{ estabelecimento.nome }}</a></strong><br>
-            {{ estabelecimento.bairro.nome }}<br />
-            {{ estabelecimento.cidade.nome }} - {{ estabelecimento.estado.sigla }}
-        </p>
-        <hr>
-    {% empty %}
-        <p>Não há estabelecimentos</p>
-        <hr>
-    {% endfor %}
-{% endif %}
-</div>
+    {% if messages %}
+        <ul class="block messages">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    {% if request.session.endereco %}
+        {% for estabelecimento in estabelecimentos %}
+            <section>
+                <h2><a href="#">{{ estabelecimento.nome }}</a></h2>
+                <p>{{ estabelecimento.bairro.nome }}<br />{{ estabelecimento.cidade.nome }} - {{ estabelecimento.estado.sigla }}</p>
+            </section>
+        {% empty %}
+            <section>
+                <h2>Não há estabelecimentos</h2>
+            </section>
+        {% endfor %}
+    {% endif %}
+
 {% endblock %}
