@@ -1,10 +1,5 @@
 {% extends "base.html" %}
 {% block title %}{{ block.super }} - Filtro{% endblock %}
-{% block extra_head %}
-    <style type="text/css">
-        select { width: 260px }
-    </style>
-{% endblock %}
 {% block script %}
 <script type="text/javascript">
 $(function(){
@@ -158,6 +153,22 @@ $(function(){
 });
 </script>
 {% endblock %}
+
+{% block form_address %}
+    <div class="panel">
+        <form id="form_local" action="{% url address:confirmar-endereco %}" method="post">{% csrf_token %}
+            {% for field in form %}
+                <p>{{ field }}</p>
+            {% endfor %}
+            <p>
+                <button class="small success button" id="confirm" type="submit">Confirmar</button>
+                <a class="small secondary button" href="{% url address:remover-endereco %}">Limpar</a>
+                <a class="small secondary button" href="{% url delivery:home %}">Voltar</a>
+            </p>
+        </form>
+    </div>
+{% endblock %}
+
 {% block content %}
 {% if messages %}
     <ul class="block messages">
@@ -166,31 +177,40 @@ $(function(){
         {% endfor %}
     </ul>
 {% endif %}
-<form id="form_local" action="{% url address:confirmar-endereco %}" method="post">{% csrf_token %}
-    {% for field in form %}
-        <p>{{ field }}</p>
-    {% endfor %}
-    <p>
-        <button class="block btn" id="confirm" type="submit">Confirmar</button>
-        <a class="block btn" href="{% url address:remover-endereco %}">Limpar</a>
-        <a class="block btn" href="{% url delivery:home %}">Voltar</a>
-    </p>
-</form>
+
 <div class="update">
 {% if request.session.endereco %}
-<h3>Por estabelecimentos</h3>
-<ul>
+    <h3>Estabelecimentos</h3>
+    <hr>
     {% for estabelecimento in estabelecimentos %}
-    <li>
-        Nome: <strong>{{ estabelecimento.nome }}</strong><br />
-        Bairro: {{ estabelecimento.bairro.nome }}<br />
-        Cidade: {{ estabelecimento.cidade.nome }}<br />
-        Estado: {{ estabelecimento.estado.sigla }}
-    </li>
+        <div class="row">
+            <div class="two phone-one columns">
+                <img src="http://placehold.it/200x200">
+            </div>
+            <div class="ten phone-three columns">
+                <p>
+                    <strong><a href="#">{{ estabelecimento.nome }}</a></strong><br>
+                    {{ estabelecimento.bairro.nome }}<br />
+                    {{ estabelecimento.cidade.nome }} - {{ estabelecimento.estado.sigla }}
+                </p>
+
+                <section class="comments">
+                    <div class="row">
+                        <div class="ten phone-three columns">
+                            <strong>Categorias:</strong>&nbsp;
+                            <a href="#">Oriental</a>, <a href="#">Brasileira</a>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+        <hr>
     {% empty %}
-        <li>Não há estabelecimentos</li>
+        <div class="row">
+            <p>Não há estabelecimentos</p>
+        </div>
+        <hr>
     {% endfor %}
-</ul>
 {% endif %}
 </div>
 {% endblock %}
