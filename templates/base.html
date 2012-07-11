@@ -14,7 +14,6 @@
     <title>{% block title %}Address{% endblock %}</title>
 
     <!-- Included CSS Files -->
-    <link rel="stylesheet" href="{{ STATIC_URL }}foundation/stylesheets/foundation.css">
     <link rel="stylesheet" media="all" href="{{ STATIC_URL }}css/style.css"/>
 
     <!-- Select2 -->
@@ -22,37 +21,52 @@
     <script src="{{ STATIC_URL }}select2/select2.js"></script>
     <link rel="stylesheet" media="all" href="{{ STATIC_URL }}select2/select2.css"/>
 
-    <!--[if lt IE 9]>
-    <link rel="stylesheet" href="{{ STATIC_URL }}foundation/stylesheets/ie.css">
-  <![endif]-->
-
-    <script src="{{ STATIC_URL }}foundation/javascripts/modernizr.foundation.js"></script>
-
     <!-- IE Fix for HTML5 Tags -->
     <!--[if lt IE 9]>
     <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-  <![endif]-->
+    <![endif]-->
     {% block extra_head %}{% endblock %}
 </head>
 <body>
 
-<div class="row">
-    <div class="twelve columns">
-        <h2>GourMap</h2>
-        <p>Encontre aqui. Onde e o quê você quer comer!</p>
-        <hr />
-    </div>
-</div>
+<header>
+    <h1>GourMap</h1>
+    <p>Encontre aqui. Onde e o quê você quer comer!</p>
+</header>
 
-<div class="row">
-    <div class="four columns">
-        {% block form_address %}{% endblock %}
-    </div>
-    <div class="eight columns">
-        {% block content %}{% endblock %}
-        {% block script %}{% endblock %}
-    </div>
-</div>
+<nav>
+    <ul class="nav">
+        <li><a class="block btn" href="/">Home</a></li>
+        <li><a class="block btn" href="/products">Products</a></li>
+        <li><a class="block btn" href="/services">Services</a></li>
+        <li><a class="block btn" href="/about">About</a></li>
+    </ul>
+</nav>
 
+<aside>
+    {% block form_address %}{% endblock %}
+    <h1>Archives</h1>
+    <ul>
+        <li><a href="/2007/09/">September 2007</a></li>
+        <li><a href="/2007/08/">August 2007</a></li>
+        <li><a href="/2007/07/">July 2007</a></li>
+    </ul>
+</aside>
+
+<section>
+    {% block content %}{% endblock %}
+    <h1>Chapter 1: The Period</h1>
+    <p>It was the best of times, it was the worst of times,
+     it was the age of wisdom, it was the age of foolishness,
+     it was the epoch of belief, it was the epoch of incredulity,
+     it was the season of Light, it was the season of Darkness,
+     ...</p>
+</section>
+
+<footer>
+    <p>&copy; Todos os direitos reservados</p>
+</footer>
+
+{% block script %}{% endblock %}
 </body>
 </html>

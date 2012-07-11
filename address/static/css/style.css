@@ -1,3 +1,5 @@
+/* Fonts */
+
 @font-face {
     font-family: 'Open Sans';
     src: url('/static/css/OpenSans-Regular.ttf');
@@ -13,10 +15,13 @@
     src: url('/static/css/Open_Sans/OpenSans-Light.ttf');
     src: local('Open Sans Light'), url('Open_Sans/OpenSans-Light.ttf') format('truetype');
 }
+
+/* Base */
+
 body {
     font-family: 'Open Sans', 'Lucida Grande', 'Lucida Sans', Verdana, sans-serif;
     color: #555;
-    font-size: 0.9em;
+    font-size: 12px;
 }
 h1 {
     font-family: 'Open Sans Light', 'Lucida Grande', 'Lucida Sans', Verdana, sans-serif;
@@ -24,7 +29,55 @@ h1 {
 strong, b {
     font-family: 'Open Sans Bold', 'Lucida Grande', 'Lucida Sans', Verdana, sans-serif;
 }
-button.small.button {
-    font-weight: normal;
-    padding: 10px 13px 11px;
+
+/* blocks */
+
+.block {
+    padding: 5px 10px;
+    border: none;
+    -webkit-border-radius: 3px;
+    -moz-border-radius   : 3px;
+    border-radius        : 3px;
 }
+
+/* Inline list */
+
+ul.nav { padding: 0 }
+ul.nav li { display: inline }
+
+/* Buttons */
+
+.btn {
+    background: #3875D7;
+    text-decoration: none;
+    color: #fff;
+    cursor: default;
+}
+.btn:disabled {
+    background: #f4f4f4;
+    text-decoration: none;
+    color: #ccc;
+    cursor: default;
+}
+.btn:disabled:hover { background: #f4f4f4 }
+.btn:hover, .btn:focus { background: #6495ed }
+.btn:active { background: #00008b }
+
+/* Alert messages */
+
+.messages {
+    padding: 0 0 8px 0;
+    background: #f5f5dc;
+    text-decoration: none;
+    color: #8b4513;
+    margin-bottom: 8px;
+}
+.messages li {
+    list-style: none;
+    padding: 8px 8px 0 8px;
+    font-size: 1.2em;
+}
+
+/* Custom */
+
+#form_local select { width: 260px }

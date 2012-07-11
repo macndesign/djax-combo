@@ -155,18 +155,16 @@ $(function(){
 {% endblock %}
 
 {% block form_address %}
-    <div class="panel">
-        <form id="form_local" action="{% url address:confirmar-endereco %}" method="post">{% csrf_token %}
-            {% for field in form %}
-                <p>{{ field }}</p>
-            {% endfor %}
-            <p>
-                <button class="small success button" id="confirm" type="submit">Confirmar</button>
-                <a class="small secondary button" href="{% url address:remover-endereco %}">Limpar</a>
-                <a class="small secondary button" href="{% url delivery:home %}">Voltar</a>
-            </p>
-        </form>
-    </div>
+    <form id="form_local" action="{% url address:confirmar-endereco %}" method="post">{% csrf_token %}
+        {% for field in form %}
+            <p>{{ field }}</p>
+        {% endfor %}
+        <p>
+            <button class="block btn" id="confirm" type="submit">Confirmar</button>
+            <a class="block btn" href="{% url address:remover-endereco %}">Limpar</a>
+            <a class="block btn" href="{% url delivery:home %}">Voltar</a>
+        </p>
+    </form>
 {% endblock %}
 
 {% block content %}
@@ -180,35 +178,15 @@ $(function(){
 
 <div class="update">
 {% if request.session.endereco %}
-    <h3>Estabelecimentos</h3>
-    <hr>
     {% for estabelecimento in estabelecimentos %}
-        <div class="row">
-            <div class="two phone-one columns">
-                <img src="http://placehold.it/200x200">
-            </div>
-            <div class="ten phone-three columns">
-                <p>
-                    <strong><a href="#">{{ estabelecimento.nome }}</a></strong><br>
-                    {{ estabelecimento.bairro.nome }}<br />
-                    {{ estabelecimento.cidade.nome }} - {{ estabelecimento.estado.sigla }}
-                </p>
-
-                <section class="comments">
-                    <div class="row">
-                        <div class="ten phone-three columns">
-                            <strong>Categorias:</strong>&nbsp;
-                            <a href="#">Oriental</a>, <a href="#">Brasileira</a>
-                        </div>
-                    </div>
-                </section>
-            </div>
-        </div>
+        <p>
+            <strong><a href="#">{{ estabelecimento.nome }}</a></strong><br>
+            {{ estabelecimento.bairro.nome }}<br />
+            {{ estabelecimento.cidade.nome }} - {{ estabelecimento.estado.sigla }}
+        </p>
         <hr>
     {% empty %}
-        <div class="row">
-            <p>Não há estabelecimentos</p>
-        </div>
+        <p>Não há estabelecimentos</p>
         <hr>
     {% endfor %}
 {% endif %}
