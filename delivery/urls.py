@@ -1,6 +1,6 @@
 # coding=utf-8
 from django.conf.urls import patterns, url
-from api.json_response import JSONDetailView
+from core.api.json_response import JSONDetailView
 from delivery.models import Estabelecimento, LocalEntrega
 
 urlpatterns = patterns('delivery.views',

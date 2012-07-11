@@ -1,7 +1,7 @@
 # coding=utf-8
 from django.conf.urls import patterns, url
 from address.models import Estado, Cidade, Bairro
-from api.json_response import JSONDetailView, JSONListView
+from core.api.json_response import JSONDetailView, JSONListView
 
 urlpatterns = patterns('address.views',
     url(r'^confirmar-endereco/$', 'confirmar_endereco', name='confirmar-endereco'),
