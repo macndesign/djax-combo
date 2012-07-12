@@ -5,6 +5,7 @@ from core.api.json_response import JSONDetailView, JSONListView
 
 urlpatterns = patterns('address.views',
     url(r'^confirmar-endereco/$', 'confirmar_endereco', name='confirmar-endereco'),
+    url(r'^endereco-automatico/$', 'endereco_automatico', name='endereco-automatico'),
     url(r'^remover-endereco/$', 'remover_endereco', name='remover-endereco'),
 )
 

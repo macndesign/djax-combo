@@ -1,0 +1,60 @@
+{% if not request.session.endereco %}
+    <form id="geoc_address" name="geoc_address" action="{% url address:endereco-automatico %}" method="post">{% csrf_token %}
+        <input type="hidden" name="geoc_estado" id="geoc_estado" value="" />
+        <input type="hidden" name="geoc_cidade" id="geoc_cidade" value="" />
+        <input type="hidden" name="geoc_bairro" id="geoc_bairro" value="" />
+        <input class="block btn" type="submit" id="geoc_submit" value="submit" style="display: none" />
+    </form>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
+    <script type="text/javascript">
+        window.onload = function() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    var lat = position.coords.latitude;
+                    var lng = position.coords.longitude;
+                    var latlng = new google.maps.LatLng(lat, lng);
+
+                    geocoder = new google.maps.Geocoder();
+
+                    geocoder.geocode({'latLng': latlng}, function(results, status) {
+                        if (status == google.maps.GeocoderStatus.OK) {
+                            console.log(results);
+                            var estado = results[0]['address_components'][4]['short_name'];
+                            var cidade = results[0]['address_components'][3]['long_name'];
+                            var bairro = results[0]['address_components'][2]['long_name'];
+
+                            $("#geoc_estado").val(estado);
+                            $("#geoc_cidade").val(cidade);
+                            $("#geoc_bairro").val(bairro);
+                            
+                            var $val_estado = $("#geoc_estado").val(estado);
+                            var $val_cidade = $("#geoc_cidade").val(cidade);
+                            var $val_bairro = $("#geoc_bairro").val(bairro);
+                            
+                            console.log($val_estado+", "+$val_cidade+", "+$val_bairro+": Confirmados!");
+                            
+                            if ($val_estado.length > 0 && $val_cidade.length > 0 && $val_bairro.length > 0){
+                                $("#geoc_address").submit();
+                                console.log(estado+", "+cidade+", "+bairro+": Confirmados!");
+                            }
+
+                        } else {
+                            console.log("Geocoder failed due to: " + status);
+                        }
+                    });
+
+                }, function(error) {
+                    alert("Error occurred. Error code: " + error.code);
+                    // error.code can be:
+                    //   0: unknown error
+                    //   1: permission denied
+                    //   2: position unavailable (error response from locaton provider)
+                    //   3: timed out
+                });
+
+            } else {
+                console.log("Geocoder failed due to: " + status);
+            }
+        }
+    </script>
+{% endif %}

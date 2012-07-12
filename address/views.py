@@ -1,3 +1,4 @@
+# coding=utf-8
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404, redirect
@@ -53,5 +54,30 @@ def confirmar_endereco(request, redirect_to='delivery:home'):
 def remover_endereco(request, redirect_to='delivery:home'):
     if 'endereco' in request.session:
         del  request.session['endereco']
+
+    return redirect(reverse(redirect_to))
+
+
+def endereco_automatico(request, redirect_to='delivery:home'):
+    endereco = Endereco()
+
+    if ('geoc_estado' in request.POST) and ('geoc_cidade' in request.POST) and ('geoc_bairro' in request.POST):
+
+        try:
+            estado = Estado.objects.get(sigla=request.POST['geoc_estado'])
+            print estado
+            
+            endereco.estado = get_object_or_404(Estado, sigla=u'%s' % request.POST['geoc_estado'])
+            endereco.cidade = get_object_or_404(Cidade, nome=u'%s' % request.POST['geoc_cidade'])
+            endereco.bairro = get_object_or_404(Bairro, nome=u'%s' % request.POST['geoc_bairro'])
+
+            request.session['endereco'] = endereco
+
+        except ValueError:
+            messages.add_message(request, messages.ERROR, message=u'Endereco sem cadastro, tente manualmente.')
+            return redirect(reverse(redirect_to))
+
+    else:
+        messages.add_message(request, messages.ERROR, message=u'Nao foi possivel localizar automaticamente.')
 
     return redirect(reverse(redirect_to))
