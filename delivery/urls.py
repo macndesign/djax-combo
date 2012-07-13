@@ -4,7 +4,8 @@ from core.api.json_response import JSONDetailView
 from delivery.models import Estabelecimento, LocalEntrega
 
 urlpatterns = patterns('delivery.views',
-    url(r'^$', 'home', name='home'),
+    url(r'^$', 'base', name='base'),
+    url(r'^home/$', 'home', name='home'),
 )
 
 urlpatterns += patterns('',

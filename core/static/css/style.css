@@ -47,6 +47,9 @@ ul.nav li { display: inline }
 
 /* Buttons */
 
+button.btn {
+    padding: 7px 10px 6px;
+}
 .btn {
     background: #3875D7;
     text-decoration: none;
@@ -82,6 +85,21 @@ a.btn { color: #fff }
 /* Custom */
 
 #form_local select { width: 100% }
-.logo { float: left }
+.logo {
+    float: left;
+    padding-left: 70px;
+    background: transparent url("../img/lunch.png") no-repeat 0 10px;
+}
 .logo h1 { margin-bottom: 2px }
-.logo p { margin-top: 0; color: #aaa }
+.logo a, .logo a:visited {
+    text-decoration: none;
+    color: #3875D7;
+    text-shadow: #CCC -1px 1px 1px;
+    -webkit-transition: all .5s ease-out;
+    -moz-transition: all .5s ease-out;
+    -ms-transition: all .5s ease-out;
+    -o-transition: all .5s ease-out;
+    transition: all .5s ease-out;
+}
+.logo a:hover { color: #6495ed }
+.logo p { margin-top: 0; color: #999 }

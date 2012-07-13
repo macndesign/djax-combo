@@ -41,7 +41,7 @@
 <div id="header-container">
     <header class="wrapper clearfix">
         <div class="logo">
-            <h1>Testes <small>goumaps.com</small></h1>
+            <h1><a href="{% url delivery:home %}">Gourmaps</a></h1>
             <p>Encontre aqui. Onde e o quê você quer comer!</p>
         </div>
         <nav>
@@ -58,8 +58,8 @@
 
         <article>
             <header>
-                <h1>5 encontrados</h1>
-                <p>Tags: <a href="#">Japonesa</a>, <a href="#">Chinesa</a>, <a href="#">Indiana</a></p>
+                <h1>{% block header_title %}Carregando ...{% endblock %}</h1>
+                <p>{% block header_tags %}Verificando estabelecimentos que entregam em seu bairro.{% endblock %}</p>
             </header>
             {% block content %}{% endblock %}
             <footer>
@@ -71,7 +71,6 @@
         <aside>
             <h3>Onde você está?</h3>
             {% block form_address %}{% endblock %}
-            <p>{% include "snippets/geocoding.html" %}</p>
             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam sodales urna non odio egestas tempor. Nunc vel vehicula ante. Etiam bibendum iaculis libero, eget molestie nisl pharetra in. In semper consequat est, eu porta velit mollis nec. Curabitur posuere enim eget turpis feugiat tempor. Etiam ullamcorper lorem dapibus velit suscipit ultrices.</p>
         </aside>
 
@@ -83,7 +82,9 @@
         <h3>&copy; All rights reserved</h3>
     </footer>
 </div>
-{% block script %}{% endblock %}
+{% block script %}
+    {% include "snippets/geocoding.html" %}
+{% endblock %}
 <script>
     var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
     (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];

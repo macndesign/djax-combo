@@ -64,12 +64,9 @@ def endereco_automatico(request, redirect_to='delivery:home'):
     if ('geoc_estado' in request.POST) and ('geoc_cidade' in request.POST) and ('geoc_bairro' in request.POST):
 
         try:
-            estado = Estado.objects.get(sigla=request.POST['geoc_estado'])
-            print estado
-            
-            endereco.estado = get_object_or_404(Estado, sigla=u'%s' % request.POST['geoc_estado'])
-            endereco.cidade = get_object_or_404(Cidade, nome=u'%s' % request.POST['geoc_cidade'])
-            endereco.bairro = get_object_or_404(Bairro, nome=u'%s' % request.POST['geoc_bairro'])
+            endereco.estado = get_object_or_404(Estado, sigla = request.POST['geoc_estado'])
+            endereco.cidade = get_object_or_404(Cidade, nome = request.POST['geoc_cidade'])
+            endereco.bairro = get_object_or_404(Bairro, nome = request.POST['geoc_bairro'])
 
             request.session['endereco'] = endereco
 
@@ -79,5 +76,6 @@ def endereco_automatico(request, redirect_to='delivery:home'):
 
     else:
         messages.add_message(request, messages.ERROR, message=u'Nao foi possivel localizar automaticamente.')
+        return redirect(reverse(redirect_to))
 
     return redirect(reverse(redirect_to))

@@ -4,6 +4,10 @@ from django.shortcuts import render
 from address.forms import EnderecoForm
 from delivery.models import Estabelecimento
 
+def base(request):
+    return render(request, 'base.html')
+
+
 def home(request):
     form = EnderecoForm()
     context = {'form': form}
