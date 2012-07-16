@@ -86,7 +86,6 @@ a.btn { color: #fff }
 
 #form_local select { width: 100% }
 .logo {
-    float: left;
     padding-left: 70px;
     background: transparent url("../img/lunch.png") no-repeat 0 10px;
 }
